@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatting</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="/socket.io/socket.io.js"></script> <!-- 자동으로 등록됨 -->
+    <script>
+        window.onload = function () {
+            //소켓을 연결합니다.
+            var socket = io.connect();
+
+            socket.on('message',function (data) {
+                var outupt = '';
+                outupt += '<li>';
+                outupt += ' <h3>'+data.name+'</h3>';
+                outupt += ' <p>'+data.message+'</p>';
+                outupt += ' <p>'+data.date+'</p>';
+                outupt += '</li>';
+
+                $(outupt).prependTo('#content');
+            });
+
+            $('#button').click(function () {
+                socket.emit('message',{
+                    name : $('#name').val(),
+                    message : $('#message').val(),
+                    date : new Date().toUTCString()
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Socket Chat</h1>
+    <p>Chat With Node.js</p>
+    <hr />
+
+    <input id="name" />
+    <input id="message" />
+    <button id="button">입력</button>
+    <ul id="content">
+
+    </ul>
+</body>
+</html>
