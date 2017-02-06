@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="/socket.io/socket.io.js"></script> <!-- 자동으로 등록됨 -->
     <script>
         window.onload = function () {
+            var room = prompt('방이름을 입려갛세요','');
             //소켓을 연결합니다.
             var socket = io.connect();
-
-            socket.on('smart',function (data) {
-                alert(data);
+            socket.emit('join',room);
+            socket.on('message',function (data) {
+                $('<p>'+data+'</p>').appendTo('body');//document.getElementById('body').appendChild("<p>"+data+"</p>");
             });
 
             document.getElementById('button').onclick = function () {
-                var text = document.getElementById('text').value;
-                socket.emit('rint',text);
+                socket.emit('message',"socket.io room message");
             };
         }
     </script>
 </head>
-<body>
-    <input type="text" id="text">
+<body id="body">
+
     <button type="button" id="button" >click</button>
 </body>
 </html>
